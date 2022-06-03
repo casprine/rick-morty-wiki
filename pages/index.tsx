@@ -68,7 +68,7 @@ const initialFilters = {
 const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requestInfo: propInRequestInfo = {} }) => {
   const [characters, setCharacters] = useState<Character[]>(propInCharacters);
   const [pageNumber, setPageNumber] = useState(1);
-  const [requestInfo, setInfo] = useState<RequestInfo>(propInRequestInfo);
+  const [requestInfo, setRequestInfo] = useState<RequestInfo>(propInRequestInfo as RequestInfo);
   const [makingRequest, setMakingRequest] = useState(false);
 
   const [filters, setFilters] = useState<Filters>(initialFilters);
@@ -77,10 +77,35 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
     return <NoCharacters />;
   }
 
+  /**
+   * @param args Filters
+   * @returns fetch characters based on provided filters
+   */
   async function getfilteredCharacters(args: Filters) {
     setMakingRequest(true);
     const { results } = await getCharacters(args);
 
+    setMakingRequest(false);
+
+    if (results) {
+      setCharacters(transformCharacters(results));
+      return;
+    }
+
+    setCharacters([]);
+  }
+
+  async function loadPaginatedData(count: number) {
+    const currentPageIndex = pageNumber + count;
+    setMakingRequest(true);
+    setPageNumber(currentPageIndex);
+
+    const { info, results } = await getCharacters({
+      ...filters,
+      pageNumber: currentPageIndex,
+    });
+
+    setRequestInfo(info);
     setMakingRequest(false);
 
     if (results) {
@@ -140,6 +165,12 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
               </>
             )}
           </div>
+        </div>
+
+        <div className="pagination flex">
+          {requestInfo?.prev && <button onClick={() => loadPaginatedData(-1)}>Prev</button>}
+
+          {requestInfo?.next && <button onClick={() => loadPaginatedData(1)}> Next </button>}
         </div>
       </MainLayout>
     </div>
@@ -210,6 +241,21 @@ const MainLayout = styled('section', {
       gridTemplateColumns: 'repeat(4, 1fr)',
       justifyContent: 'space-between',
       gap: 20,
+    },
+  },
+  '.pagination': {
+    justifyContent: 'center',
+    margin: 20,
+    gap: 10,
+
+    button: {
+      backgroundColor: '$green',
+      color: '$loContrast',
+      border: 0,
+      fontSize: 15,
+      padding: '4px 15px',
+      borderRadius: 4,
+      cursor: 'pointer',
     },
   },
 });
