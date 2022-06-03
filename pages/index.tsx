@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
 
-import { Header, Filters, CharacterCard } from '@/components/index';
+import { Header, Filters, CharacterCard, Spinner } from '@/components/index';
 import { styled } from '@/stitches';
 import { Character, RequestInfo, FilterType } from '@/types';
 import { getCharacters } from 'lib/requests';
@@ -66,9 +66,10 @@ const initialFilters = {
 };
 
 const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requestInfo: propInRequestInfo = {} }) => {
-  let [characters, setCharacters] = useState<Character[]>(propInCharacters);
-  let [pageNumber, setPageNumber] = useState(1);
-  let [requestInfo, setInfo] = useState<RequestInfo>(propInRequestInfo);
+  const [characters, setCharacters] = useState<Character[]>(propInCharacters);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [requestInfo, setInfo] = useState<RequestInfo>(propInRequestInfo);
+  const [makingRequest, setMakingRequest] = useState(false);
 
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
@@ -77,7 +78,10 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
   }
 
   async function getfilteredCharacters(args: Filters) {
+    setMakingRequest(true);
     const { results } = await getCharacters(args);
+
+    setMakingRequest(false);
 
     if (results) {
       setCharacters(transformCharacters(results));
@@ -111,9 +115,18 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
       </Head>
 
       <MainLayout>
+        {makingRequest && (
+          <div className="modal">
+            <div className="content">
+              <Spinner />
+            </div>
+          </div>
+        )}
+
         <Header title="All Characters" />
+
         <div className="filters">
-          <Filters onClear={onFilterClear} onFilterChange={onFilterChange} />
+          <Filters filterValues={filters} onClear={onFilterClear} onFilterChange={onFilterChange} />
         </div>
         <div className="grid">
           <div className="content">
@@ -173,6 +186,7 @@ const MainLayout = styled('section', {
   fontFamily: '$system',
   maxWidth: '1280px',
   margin: '0 auto',
+  position: 'relative',
 
   '.page-header': {
     textAlign: 'center',

@@ -6,7 +6,7 @@ import { FilterType } from '@/types';
 import { capitalize } from 'lib/helpers';
 
 type filterOption = {
-  label: string;
+  label: FilterType;
   values: string[];
 };
 
@@ -40,24 +40,38 @@ const filterOptions: filterOption[] = [
 ];
 
 interface FiltersProps {
-  // updatePageNumber?: (pageNumber: number) => void;
   onClear: () => void;
   onFilterChange: (type: FilterType, value: string) => void;
+  filterValues: Record<FilterType, string>;
 }
 
 interface FilterProps {
-  label: string;
-  onFilterClick: (label: string, filter: string) => void;
+  label: FilterType;
+  onFilterClick: (label: FilterType, filter: string) => void;
   values: string[];
+  selectValue: string;
 }
 
-const Filter: FunctionComponent<FilterProps> = ({ onFilterClick, label, values }) => {
+const Filter: FunctionComponent<FilterProps> = ({ selectValue, onFilterClick, label, values }) => {
   return (
     <FilterContainer>
       <p className="label">{label}</p>
       <Select
         styles={selectStyles}
-        onChange={({ value }: { value: string }) => onFilterClick(label, value)}
+        id="filter-select"
+        instanceId="filter-select"
+        value={
+          selectValue
+            ? {
+                label: capitalize(selectValue),
+                value: selectValue,
+              }
+            : null
+        }
+        onChange={(selectedOption: any) => {
+          onFilterClick(label, selectedOption.value);
+        }}
+        placeholder={`Select a ${label}`}
         options={values.map((v: string) => {
           return {
             value: v,
@@ -69,28 +83,23 @@ const Filter: FunctionComponent<FilterProps> = ({ onFilterClick, label, values }
   );
 };
 
-export const Filters: FunctionComponent<FiltersProps> = ({ onClear, onFilterChange }) => {
+export const Filters: FunctionComponent<FiltersProps> = ({ filterValues, onClear, onFilterChange }) => {
   return (
     <Container className="flex">
-      <div className="actions flex">
-        {filterOptions.map((filter: filterOption, index: number) => {
-          return <Filter {...filter} key={index} onFilterClick={onFilterChange} />;
-        })}
-
-        <button onClick={onClear}>Clear All</button>
-      </div>
+      {filterOptions.map((filter: filterOption, index: number) => {
+        return (
+          <Filter {...filter} selectValue={filterValues[filter.label]} key={index} onFilterClick={onFilterChange} />
+        );
+      })}
+      <button onClick={onClear}>Clear All</button>
     </Container>
   );
 };
 
 const Container = styled('div', {
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: 'flex-end',
   marginBottom: 30,
-
-  '*': {
-    outline: '1px dotted red',
-  },
 
   '.header': {
     display: 'flex',
@@ -99,17 +108,13 @@ const Container = styled('div', {
     justifyContent: 'space-between',
   },
 
-  '.actions': {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   button: {
     border: 0,
     backgroundColor: 'transparent',
     color: '$blue',
     cursor: 'pointer',
     fontSize: 16,
+    marginBottom: 10,
   },
 });
 

@@ -122,4 +122,28 @@ export const globalStyles = globalCss({
   template: { display: 'none' },
   '[hidden]': { display: 'none' },
   '.flex': { display: 'flex' },
+
+  '.modal': {
+    display: 'block',
+    position: 'fixed',
+    zIndex: 1,
+    left: '0',
+    top: '0',
+    width: '100%',
+    height: '100%',
+    overflow: 'auto',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+
+    '.content': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+    },
+  },
+
+  '@keyframes lds-roller': {
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' },
+  },
 });
