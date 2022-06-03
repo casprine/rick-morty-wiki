@@ -48,7 +48,10 @@ const SingleCharacterPage: NextPage<SingleCharacterPageProps> = ({ character, ep
         <Header title="Character" />
         <div className="grid">
           <div className="character">
-            <CharacterCard {...character} status={character.status.toLocaleLowerCase()} />
+            <CharacterCard
+              {...character}
+              status={character.status.toLocaleLowerCase() as 'alive' | 'dead' | 'unknown'}
+            />
           </div>
 
           <div className="content">
@@ -79,7 +82,7 @@ const Container = styled('div', {
   },
 
   '.image-container': {
-    height: 430,
+    height: 450,
     borderRadius: 4,
     overflow: 'hidden',
     position: 'relative',

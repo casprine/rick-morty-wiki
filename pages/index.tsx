@@ -58,6 +58,8 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
 
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
+  // console.log('episode', JSON.stringify(characters[1], null, 2));
+
   if (isEmpty(propInCharacters)) {
     return <NoCharacters />;
   }

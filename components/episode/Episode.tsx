@@ -13,7 +13,7 @@ export const Episode: FunctionComponent<EpisodeType> = ({ name, airDate, episode
 };
 
 const Container = styled('div', {
-  border: '1px solid $grayLight',
+  border: '1px solid $borderColor',
   padding: 20,
   marginBottom: -1,
   marginLeft: -1,

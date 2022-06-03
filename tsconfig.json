@@ -17,10 +17,9 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/pages/*": ["pages/*"],
       "@/stitches": ["stitches.config.ts"],
       "@/types": ["types/types.ts"],
-      "@/lib/*": ["/lib"]
+      "@/lib/*": ["/lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

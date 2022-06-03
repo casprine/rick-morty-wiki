@@ -1,12 +1,14 @@
+export type StatusType = 'alive' | 'unknown' | 'dead';
+
 export interface Character {
   id: number;
   name: string;
   species: string;
   image: string;
-  status: 'alive' | 'dead' | 'unknown';
+  status: StatusType;
   location: Location;
   gender: string;
-  episode: string[];
+  episode?: string[];
 }
 
 export interface CharacterResponse {
