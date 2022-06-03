@@ -1,43 +1,18 @@
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import router from 'next/router';
 
 import { Header, Filters, CharacterCard } from '@/components/index';
 import { styled } from '@/stitches';
 import { Character, RequestInfo } from '@/types';
 import { getCharacters } from 'lib/requests';
 
-const testCharacter: Character = {
-  created: '2017-11-04T18:48:46.250Z',
-  episode: ['https://rickandmortyapi.com/api/episode/1', 'https://rickandmortyapi.com/api/episode/2'],
-  gender: 'Male',
-  id: 1,
-  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-  location: {
-    name: 'Citadel of Ricks',
-    url: 'https://rickandmortyapi.com/api/location/3',
-  },
-  name: 'Rick Sanchez',
-  origin: {
-    name: 'Earth (C-137)',
-    url: 'https://rickandmortyapi.com/api/location/1',
-    type: '',
-    created: '',
-    id: '',
-    dimension: '',
-  },
-  species: 'Human',
-  status: 'Alive',
-  type: '',
-  url: 'https://rickandmortyapi.com/api/character/1',
-  residents: [],
-};
-
 const transforCharacters = (data: Array<Character>) => {
   return data.map(({ name, status, species, location, gender, id, image }: Character) => {
     return {
       name,
-      status,
+      status: status.toLocaleLowerCase(),
       species,
       location,
       gender,
@@ -46,6 +21,8 @@ const transforCharacters = (data: Array<Character>) => {
     };
   });
 };
+
+const isEmpty = (value: Array<any>) => value.length === 0;
 
 interface HomePageProps {
   requestInfo: RequestInfo;
@@ -68,8 +45,6 @@ export async function getServerSideProps() {
     characters = transforCharacters(response.results);
   } catch (error) {}
 
-  console.log('response', { requestInfo });
-
   return {
     props: {
       requestInfo,
@@ -85,6 +60,10 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
   // let [gender, setGender] = useState('');
   // let [species, setSpecies] = useState('');
   let [requestInfo, setInfo] = useState<RequestInfo>();
+
+  if (isEmpty(propInCharacters)) {
+    return <NoCharacters />;
+  }
 
   return (
     <div>
@@ -111,6 +90,34 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
     </div>
   );
 };
+
+const NoCharacters = () => {
+  return (
+    <NoCharactersContainer className="flex">
+      <p>Hey, We {"couldn't"} find any rick and morty characters</p>
+      <button onClick={() => router.reload()}>Reload page</button>
+    </NoCharactersContainer>
+  );
+};
+
+const NoCharactersContainer = styled('div', {
+  justifyContent: 'center',
+  alignItems: 'center',
+  outline: '1px dotted red',
+  height: '100vh',
+  flexDirection: 'column',
+
+  button: {
+    border: '0px',
+    backgroundColor: '$blue',
+    marginTop: 10,
+    height: 46,
+    padding: '0 25px',
+    color: '$loContrast',
+    borderRadius: 4,
+    cursor: 'pointer',
+  },
+});
 
 const MainLayout = styled('section', {
   fontFamily: '$system',

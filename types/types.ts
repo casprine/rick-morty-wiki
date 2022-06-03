@@ -3,7 +3,7 @@ export interface Character {
   name: string;
   species: string;
   image: string;
-  status: 'Alive' | 'Dead' | 'Unknown';
+  status: 'alive' | 'dead' | 'unknown';
   origin: Location;
   location: Location;
   gender: string;

@@ -18,7 +18,7 @@ export const CharacterCard: FunctionComponent<CharacterCardProps> = ({ location,
             <h4 className="name">{name}</h4>
             <p className="species">{species}</p>
           </div>
-          <Status status={status.toLocaleLowerCase()}>
+          <Status status={status}>
             <p>{status}</p>
           </Status>
         </div>
