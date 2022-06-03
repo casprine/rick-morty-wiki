@@ -89,10 +89,6 @@ export const globalStyles = globalCss({
       borderStyle: 'none',
       padding: '0',
     },
-  'button:-moz-focusring,\n[type="button"]:-moz-focusring,\n[type="reset"]:-moz-focusring,\n[type="submit"]:-moz-focusring':
-    {
-      outline: '1px dotted ButtonText',
-    },
   fieldset: { padding: '0.35em 0.75em 0.625em' },
   legend: {
     boxSizing: 'border-box',

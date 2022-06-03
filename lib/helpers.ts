@@ -1,4 +1,4 @@
-import { Character, Episode } from '@/types';
+import { Character, Episode, StatusType } from '@/types';
 
 export const capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -8,7 +8,7 @@ export const transformCharacters = (data: Character[]) => {
   return data.map(({ name, status, species, location, gender, id, image }: Character): Character => {
     return {
       name,
-      status: status.toLocaleLowerCase(),
+      status: status.toLocaleLowerCase() as StatusType,
       species,
       location,
       gender,

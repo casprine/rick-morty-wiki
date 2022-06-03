@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
 
-import { Header, Filters, CharacterCard, Spinner } from '@/components/index';
+import { Filters, CharacterCard, Spinner } from '@/components/index';
 import { styled } from '@/stitches';
 import { Character, RequestInfo, FilterType } from '@/types';
 import { getCharacters } from 'lib/requests';
@@ -57,8 +57,6 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
   const [makingRequest, setMakingRequest] = useState(false);
 
   const [filters, setFilters] = useState<Filters>(initialFilters);
-
-  // console.log('episode', JSON.stringify(characters[1], null, 2));
 
   if (isEmpty(propInCharacters)) {
     return <NoCharacters />;
@@ -139,7 +137,7 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
           </div>
         )}
 
-        <Header title="All Characters" />
+        <h1 className="page-header">All Characters</h1>
 
         <div className="filters">
           <Filters filterValues={filters} onClear={onFilterClear} onFilterChange={onFilterChange} />
@@ -188,7 +186,6 @@ const EmptyFilters = () => {
 const NoCharactersContainer = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
-  outline: '1px dotted red',
   height: '100vh',
   flexDirection: 'column',
 

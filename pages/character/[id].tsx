@@ -1,7 +1,8 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
+import router from 'next/router';
 
-import { Header, CharacterCard, Episode } from '@/components/index';
+import { CharacterCard, Episode } from '@/components/index';
 import { styled } from '@/stitches';
 import { getEpisodes, getSingleCharacter } from 'lib/requests';
 import { transformCharacterEpisodes } from 'lib/helpers';
@@ -21,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const response = await getSingleCharacter(id as string);
 
     if (response?.id) {
-      episodes = await getEpisodes(response.episode);
+      episodes = await getEpisodes(response.episode as string[]);
     }
 
     character = response;
@@ -45,7 +46,10 @@ const SingleCharacterPage: NextPage<SingleCharacterPageProps> = ({ character, ep
       </Head>
 
       <Container>
-        <Header title="Character" />
+        <div className="header flex">
+          <button onClick={() => router.back()}>All Characters</button>
+          <h2 className="title">Character</h2>
+        </div>
         <div className="grid">
           <div className="character">
             <CharacterCard
@@ -55,9 +59,12 @@ const SingleCharacterPage: NextPage<SingleCharacterPageProps> = ({ character, ep
           </div>
 
           <div className="content">
-            {episodes.map((e: EpisodeType) => (
-              <Episode key={e.id} {...e} />
-            ))}
+            <h3>Episodes</h3>
+            <div className="content-grid">
+              {episodes.map((e: EpisodeType) => (
+                <Episode key={e.id} {...e} />
+              ))}
+            </div>
           </div>
         </div>
       </Container>
@@ -77,6 +84,19 @@ const Container = styled('div', {
     marginBottom: 50,
   },
 
+  '.header': {
+    padding: '20px 0',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    button: {
+      color: '$blue',
+      backgroundColor: 'white',
+      border: 0,
+      cursor: 'pointer',
+    },
+  },
+
   '.character': {
     gridColumn: 'span 4',
   },
@@ -90,8 +110,11 @@ const Container = styled('div', {
 
   '.content': {
     gridColumn: 'span 8',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    '.content-grid': {
+      marginTop: 20,
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+    },
   },
 });
 

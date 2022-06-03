@@ -1,4 +1,4 @@
-import { CharacterCard } from './CharacterCard';
+import { CharacterCard } from '../CharacterCard';
 import { render } from '@testing-library/react';
 import { testCharacter } from 'lib/const';
 
