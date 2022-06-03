@@ -5,5 +5,5 @@ interface HeaderProps {
 }
 
 export const Header: FunctionComponent<HeaderProps> = ({ title }) => {
-  return <h1>{title}</h1>;
+  return <h1 className="page-header"> {title}</h1>;
 };

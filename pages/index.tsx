@@ -112,11 +112,10 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
 
       <MainLayout>
         <Header title="All Characters" />
+        <div className="filters">
+          <Filters onClear={onFilterClear} onFilterChange={onFilterChange} />
+        </div>
         <div className="grid">
-          <div className="filters">
-            <Filters onClear={onFilterClear} onFilterChange={onFilterChange} />
-          </div>
-
           <div className="content">
             {isEmpty(characters) ? (
               <EmptyFilters />
@@ -175,8 +174,8 @@ const MainLayout = styled('section', {
   maxWidth: '1280px',
   margin: '0 auto',
 
-  '*': {
-    outline: '1px dotted red',
+  '.page-header': {
+    textAlign: 'center',
   },
 
   '.empty-filter-results': {
@@ -191,14 +190,10 @@ const MainLayout = styled('section', {
     gridTemplateColumns: 'repeat(12, 1fr)',
     gap: 10,
 
-    '.filters': {
-      gridColumn: 'span 3',
-    },
-
     '.content': {
-      gridColumn: 'span 9',
+      gridColumn: 'span 12',
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
+      gridTemplateColumns: 'repeat(4, 1fr)',
       justifyContent: 'space-between',
       gap: 20,
     },

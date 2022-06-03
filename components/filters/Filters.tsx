@@ -1,10 +1,9 @@
 import { FunctionComponent } from 'react';
-import Select from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 
 import { styled } from '@/stitches';
 import { FilterType } from '@/types';
-
-const capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
+import { capitalize } from 'lib/helpers';
 
 type filterOption = {
   label: string;
@@ -57,6 +56,7 @@ const Filter: FunctionComponent<FilterProps> = ({ onFilterClick, label, values }
     <FilterContainer>
       <p className="label">{label}</p>
       <Select
+        styles={selectStyles}
         onChange={({ value }: { value: string }) => onFilterClick(label, value)}
         options={values.map((v: string) => {
           return {
@@ -71,43 +71,83 @@ const Filter: FunctionComponent<FilterProps> = ({ onFilterClick, label, values }
 
 export const Filters: FunctionComponent<FiltersProps> = ({ onClear, onFilterChange }) => {
   return (
-    <Container>
-      <div className="header">
-        <h4>Filters</h4>
+    <Container className="flex">
+      <div className="actions flex">
+        {filterOptions.map((filter: filterOption, index: number) => {
+          return <Filter {...filter} key={index} onFilterClick={onFilterChange} />;
+        })}
+
         <button onClick={onClear}>Clear All</button>
       </div>
-
-      {filterOptions.map((filter: filterOption, index: number) => {
-        return <Filter {...filter} key={index} onFilterClick={onFilterChange} />;
-      })}
     </Container>
   );
 };
 
 const Container = styled('div', {
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 30,
+
+  '*': {
+    outline: '1px dotted red',
+  },
+
   '.header': {
     display: 'flex',
     alignItems: 'center',
     width: '100%',
     justifyContent: 'space-between',
+  },
 
-    button: {
-      border: 0,
-      backgroundColor: 'transparent',
-      color: '$blue',
-      cursor: 'pointer',
-      fontSize: 16,
-    },
+  '.actions': {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  button: {
+    border: 0,
+    backgroundColor: 'transparent',
+    color: '$blue',
+    cursor: 'pointer',
+    fontSize: 16,
   },
 });
 
 const FilterContainer = styled('div', {
   marginTop: 20,
+  marginLeft: '5px',
+  marginRight: '5px',
 
   '.label': {
     textTransform: 'uppercase',
-    margin: 5,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 500,
+    marginBottom: 5,
   },
 });
+
+const selectStyles: StylesConfig<{}> = {
+  container: (styles) => ({
+    ...styles,
+    width: 200,
+  }),
+
+  input: (styles) => ({
+    ...styles,
+    fontSize: 15,
+    height: 25,
+  }),
+
+  placeholder: (styles) => ({
+    ...styles,
+    fontSize: 15,
+  }),
+  singleValue: (styles) => ({
+    ...styles,
+    fontSize: 15,
+  }),
+  option: (styles) => ({
+    ...styles,
+    fontSize: 15,
+  }),
+};
