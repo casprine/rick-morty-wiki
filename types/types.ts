@@ -37,3 +37,10 @@ export interface Episode {
   url: string;
   created: string;
 }
+
+export interface GetCharacterParams {
+  status?: string;
+  species?: string;
+  pageNumber?: number;
+  gender?: string;
+}

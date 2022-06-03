@@ -9,7 +9,7 @@ export const CharacterCard: FunctionComponent<CharacterCardProps> = ({ location,
   return (
     <Container>
       <div className="image-container">
-        <Image src={image} layout="fill" />
+        <Image src={image} alt={`${name}-image`} layout="fill" />
       </div>
 
       <div className="character-details">
@@ -35,6 +35,7 @@ const Container = styled('div', {
   padding: 10,
   border: '1px solid $borderColor',
   borderRadius: 4,
+  cursor: 'pointer',
 
   '.image-container': {
     width: '100%',

@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+
 import { Header, Filters, CharacterCard } from '@/components/index';
 import { styled } from '@/stitches';
-import { Character } from '@/types';
+import { Character, RequestInfo } from '@/types';
+import { getCharacters } from 'lib/requests';
 
 const testCharacter: Character = {
   created: '2017-11-04T18:48:46.250Z',
@@ -30,7 +33,59 @@ const testCharacter: Character = {
   residents: [],
 };
 
-const Home: NextPage = () => {
+const transforCharacters = (data: Array<Character>) => {
+  return data.map(({ name, status, species, location, gender, id, image }: Character) => {
+    return {
+      name,
+      status,
+      species,
+      location,
+      gender,
+      id,
+      image,
+    };
+  });
+};
+
+interface HomePageProps {
+  requestInfo: RequestInfo;
+  characters: Array<Character>;
+}
+
+export async function getServerSideProps() {
+  let requestInfo = {};
+  let characters = {};
+
+  try {
+    const response = await getCharacters({
+      status: '',
+      gender: '',
+      species: '',
+      pageNumber: 1,
+    });
+
+    requestInfo = response.info;
+    characters = transforCharacters(response.results);
+  } catch (error) {}
+
+  console.log('response', { requestInfo });
+
+  return {
+    props: {
+      requestInfo,
+      characters,
+    },
+  };
+}
+
+const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requestInfo: propInRequestInfo = {} }) => {
+  let [characters, setCharacters] = useState<Character[]>(propInCharacters);
+  let [pageNumber, setPageNumber] = useState(1);
+  // let [status, setStatus] = useState('');
+  // let [gender, setGender] = useState('');
+  // let [species, setSpecies] = useState('');
+  let [requestInfo, setInfo] = useState<RequestInfo>();
+
   return (
     <div>
       <Head>
@@ -47,13 +102,9 @@ const Home: NextPage = () => {
           </div>
 
           <div className="content">
-            <CharacterCard {...testCharacter} />
-            <CharacterCard {...testCharacter} />
-            <CharacterCard {...testCharacter} status="Dead" />
-            <CharacterCard {...testCharacter} />
-            <CharacterCard {...testCharacter} status="Unknown" />
-            <CharacterCard {...testCharacter} />
-            <CharacterCard {...testCharacter} />
+            {characters.map((character: Character) => (
+              <CharacterCard {...character} key={character.id} />
+            ))}
           </div>
         </div>
       </MainLayout>
@@ -67,7 +118,7 @@ const MainLayout = styled('section', {
   margin: '0 auto',
 
   '*': {
-    // outline: '1px dotted red',
+    outline: '1px dotted red',
   },
 
   '.grid': {

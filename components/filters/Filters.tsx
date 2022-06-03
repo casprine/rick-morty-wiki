@@ -95,6 +95,7 @@ const Container = styled('div', {
       backgroundColor: 'transparent',
       color: '$blue',
       cursor: 'pointer',
+      fontSize: 16,
     },
   },
 });
@@ -105,5 +106,7 @@ const FilterContainer = styled('div', {
   '.label': {
     textTransform: 'uppercase',
     margin: 5,
+    fontSize: 16,
+    fontWeight: 500,
   },
 });

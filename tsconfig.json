@@ -19,7 +19,8 @@
       "@/components/*": ["components/*"],
       "@/pages/*": ["pages/*"],
       "@/stitches": ["stitches.config.ts"],
-      "@/types": ["types/types.ts"]
+      "@/types": ["types/types.ts"],
+      "@/lib/*": ["/lib"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
