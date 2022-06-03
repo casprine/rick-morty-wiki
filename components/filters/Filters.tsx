@@ -97,9 +97,14 @@ export const Filters: FunctionComponent<FiltersProps> = ({ filterValues, onClear
 };
 
 const Container = styled('div', {
-  justifyContent: 'center',
   alignItems: 'flex-end',
   marginBottom: 30,
+  flexWrap: 'wrap',
+  justifyContent: 'flex-start',
+
+  '@sm': {
+    justifyContent: 'center',
+  },
 
   '.header': {
     display: 'flex',

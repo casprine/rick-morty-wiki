@@ -76,12 +76,17 @@ const Container = styled('div', {
   maxWidth: '1280px',
   margin: '0 auto',
   position: 'relative',
+  padding: 20,
+
+  '@sm': {
+    padding: 0,
+  },
 
   '.grid': {
     display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
     gap: 10,
     marginBottom: 50,
+    gridTemplateColumns: 'repeat(12, 1fr)',
   },
 
   '.header': {
@@ -98,7 +103,11 @@ const Container = styled('div', {
   },
 
   '.character': {
-    gridColumn: 'span 4',
+    gridColumn: 'span 12',
+
+    '@sm': {
+      gridColumn: 'span 4',
+    },
   },
 
   '.image-container': {
@@ -109,7 +118,12 @@ const Container = styled('div', {
   },
 
   '.content': {
-    gridColumn: 'span 8',
+    gridColumn: 'span 12',
+
+    '@sm': {
+      gridColumn: 'span 8',
+    },
+
     '.content-grid': {
       marginTop: 20,
       display: 'grid',

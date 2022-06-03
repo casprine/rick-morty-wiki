@@ -20,6 +20,11 @@ export const { globalCss, styled, getCssText } = createStitches({
       black: '$18181b',
     },
   },
+  media: {
+    sm: '(min-width: 640px)',
+    md: '(min-width: 768px)',
+    lg: '(min-width: 1024px)',
+  },
 });
 
 export const globalStyles = globalCss({

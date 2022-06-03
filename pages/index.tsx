@@ -225,9 +225,17 @@ const MainLayout = styled('section', {
     '.content': {
       gridColumn: 'span 12',
       display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridTemplateColumns: 'repeat(2, 1fr)',
       justifyContent: 'space-between',
       gap: 20,
+
+      '@md': {
+        gridTemplateColumns: 'repeat(3, 1fr)',
+      },
+
+      '@lg': {
+        gridTemplateColumns: 'repeat(4, 1fr)',
+      },
     },
   },
   '.pagination': {
