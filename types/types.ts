@@ -4,11 +4,8 @@ export interface Character {
   species: string;
   image: string;
   status: 'alive' | 'dead' | 'unknown';
-  origin: Location;
   location: Location;
   gender: string;
-  episode: string[];
-  url: string;
 }
 
 export interface CharacterResponse {
@@ -44,3 +41,5 @@ export interface GetCharacterParams {
   pageNumber?: number;
   gender?: string;
 }
+
+export type FilterType = 'status' | 'gender' | 'species';

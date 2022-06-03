@@ -5,11 +5,11 @@ import router from 'next/router';
 
 import { Header, Filters, CharacterCard } from '@/components/index';
 import { styled } from '@/stitches';
-import { Character, RequestInfo } from '@/types';
+import { Character, RequestInfo, FilterType } from '@/types';
 import { getCharacters } from 'lib/requests';
 
-const transforCharacters = (data: Array<Character>) => {
-  return data.map(({ name, status, species, location, gender, id, image }: Character) => {
+const transformCharacters = (data: Character[]) => {
+  return data.map(({ name, status, species, location, gender, id, image }: Character): Character => {
     return {
       name,
       status: status.toLocaleLowerCase(),
@@ -42,7 +42,7 @@ export async function getServerSideProps() {
     });
 
     requestInfo = response.info;
-    characters = transforCharacters(response.results);
+    characters = transformCharacters(response.results);
   } catch (error) {}
 
   return {
@@ -53,16 +53,53 @@ export async function getServerSideProps() {
   };
 }
 
+interface Filters {
+  status: string;
+  gender: string;
+  species: string;
+}
+
+const initialFilters = {
+  status: '',
+  gender: '',
+  species: '',
+};
+
 const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requestInfo: propInRequestInfo = {} }) => {
   let [characters, setCharacters] = useState<Character[]>(propInCharacters);
   let [pageNumber, setPageNumber] = useState(1);
-  // let [status, setStatus] = useState('');
-  // let [gender, setGender] = useState('');
-  // let [species, setSpecies] = useState('');
-  let [requestInfo, setInfo] = useState<RequestInfo>();
+  let [requestInfo, setInfo] = useState<RequestInfo>(propInRequestInfo);
+
+  const [filters, setFilters] = useState<Filters>(initialFilters);
 
   if (isEmpty(propInCharacters)) {
     return <NoCharacters />;
+  }
+
+  async function getfilteredCharacters(args: Filters) {
+    const { results } = await getCharacters(args);
+
+    if (results) {
+      setCharacters(transformCharacters(results));
+      return;
+    }
+
+    setCharacters([]);
+  }
+
+  function onFilterChange(type: FilterType, value: string) {
+    const newFilters = {
+      ...filters,
+      [type]: value,
+    };
+    setFilters(newFilters);
+
+    getfilteredCharacters(newFilters);
+  }
+
+  function onFilterClear() {
+    setFilters(initialFilters);
+    setCharacters(propInCharacters);
   }
 
   return (
@@ -77,13 +114,19 @@ const Home: NextPage<HomePageProps> = ({ characters: propInCharacters = [], requ
         <Header title="All Characters" />
         <div className="grid">
           <div className="filters">
-            <Filters onClear={() => {}} onFilterChange={() => {}} />
+            <Filters onClear={onFilterClear} onFilterChange={onFilterChange} />
           </div>
 
           <div className="content">
-            {characters.map((character: Character) => (
-              <CharacterCard {...character} key={character.id} />
-            ))}
+            {isEmpty(characters) ? (
+              <EmptyFilters />
+            ) : (
+              <>
+                {characters.map((character: Character) => (
+                  <CharacterCard {...character} key={character.id} />
+                ))}
+              </>
+            )}
           </div>
         </div>
       </MainLayout>
@@ -97,6 +140,14 @@ const NoCharacters = () => {
       <p>Hey, We {"couldn't"} find any rick and morty characters</p>
       <button onClick={() => router.reload()}>Reload page</button>
     </NoCharactersContainer>
+  );
+};
+
+const EmptyFilters = () => {
+  return (
+    <div className="empty-filter-results flex">
+      <p>Sorry, we are unable to find any characters for this filter</p>
+    </div>
   );
 };
 
@@ -126,6 +177,13 @@ const MainLayout = styled('section', {
 
   '*': {
     outline: '1px dotted red',
+  },
+
+  '.empty-filter-results': {
+    width: '100%',
+    gridColumn: 'span 8',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   '.grid': {

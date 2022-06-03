@@ -21,11 +21,17 @@ export const getSingleCharacter = async (id: string): Promise<Character> => {
  * @returns Array of CharacterResponse
  */
 export const getCharacters = async ({
-  status,
-  gender,
-  pageNumber,
-  species,
+  status = '',
+  gender = '',
+  pageNumber = 1,
+  species = '',
 }: GetCharacterParams): Promise<CharacterResponse> => {
+  console.log({
+    status,
+    gender,
+    pageNumber,
+    species,
+  });
   const url = `${BASE_CHARACTER_URL}/?page=${pageNumber}&status=${status}&gender=${gender}&species=${species}`;
   return await fetcher(url);
 };

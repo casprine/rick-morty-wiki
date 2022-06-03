@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react';
 import Select from 'react-select';
 
 import { styled } from '@/stitches';
+import { FilterType } from '@/types';
 
 const capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -42,7 +43,7 @@ const filterOptions: filterOption[] = [
 interface FiltersProps {
   // updatePageNumber?: (pageNumber: number) => void;
   onClear: () => void;
-  onFilterChange: (label: string, filter: string) => void;
+  onFilterChange: (type: FilterType, value: string) => void;
 }
 
 interface FilterProps {
