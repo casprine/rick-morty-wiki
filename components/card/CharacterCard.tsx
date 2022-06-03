@@ -3,11 +3,20 @@ import { styled } from '@/stitches';
 import { Character } from '@/types';
 import Image from 'next/image';
 
-interface CharacterCardProps extends Character {}
+interface CharacterCardProps extends Character {
+  onClick?: () => void;
+}
 
-export const CharacterCard: FunctionComponent<CharacterCardProps> = ({ location, image, name, status, species }) => {
+export const CharacterCard: FunctionComponent<CharacterCardProps> = ({
+  onClick,
+  location,
+  image,
+  name,
+  status,
+  species,
+}) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <div className="image-container">
         <Image src={image} alt={`${name}-image`} layout="fill" />
       </div>

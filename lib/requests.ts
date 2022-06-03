@@ -12,7 +12,7 @@ const getEpisodeIds = (urls: string[] = []): number[] => {
  * @param {string} id
  * @returns Character
  */
-export const getSingleCharacter = async (id: string): Promise<Character> => {
+export const getSingleCharacter = async (id: number | string): Promise<Character> => {
   return await fetcher(`${BASE_URL}/character/${id}`);
 };
 
@@ -26,12 +26,6 @@ export const getCharacters = async ({
   pageNumber = 1,
   species = '',
 }: GetCharacterParams): Promise<CharacterResponse> => {
-  console.log({
-    status,
-    gender,
-    pageNumber,
-    species,
-  });
   const url = `${BASE_CHARACTER_URL}/?page=${pageNumber}&status=${status}&gender=${gender}&species=${species}`;
   return await fetcher(url);
 };

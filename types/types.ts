@@ -6,6 +6,7 @@ export interface Character {
   status: 'alive' | 'dead' | 'unknown';
   location: Location;
   gender: string;
+  episode: string[];
 }
 
 export interface CharacterResponse {
@@ -14,25 +15,19 @@ export interface CharacterResponse {
 }
 
 export interface RequestInfo {
-  count: number;
-  pages: number;
   next: string;
   prev: string | null;
 }
 
 export interface Location {
   name: string;
-  url: string;
 }
 
 export interface Episode {
   id: number;
   name: string;
-  air_date: string;
+  airDate: string;
   episode: string;
-  characters: Character[];
-  url: string;
-  created: string;
 }
 
 export interface GetCharacterParams {
